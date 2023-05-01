@@ -1,35 +1,30 @@
-import { Component } from 'react';
+import { useState } from 'react';
 import PropTypes from 'prop-types';
 import css from './SearchBar.module.css';
 import { AiOutlineSearch } from "react-icons/ai"
 import { toast } from 'react-toastify';
 
-export class Searchbar extends Component {
-  state = {
-    search: '',
+export const Searchbar = ({onSubmit}) => {
+  const [search, setSearch] = useState('')
+
+const  handleChange = e => {
+  setSearch(e.target.value.trim());
   };
 
-  handleChange = e => {
-    this.setState({ search: e.target.value.trim() });
-  };
-
-  handleSubmit = e => {
+const  handleSubmit = e => {
     e.preventDefault();
-    const { search } = this.state;
-    const { onSubmit } = this.props;
     if (search === '') {
       return toast.error(`Please enter your request `)
     }
     onSubmit(search)
-    
   };
 
-  render() {
-    const { search } = this.state;
     return (
       <header className={css.Searchbar}>
         <form className={css.SearchForm}>
-          <button type="submit" className={css.SearchForm__button} onClick={this.handleSubmit}>
+          <button type="submit" 
+          className={css.SearchForm__button} 
+          onClick={handleSubmit}>
             <AiOutlineSearch className={css.icon}/>
           </button>
 
@@ -39,14 +34,13 @@ export class Searchbar extends Component {
             autoComplete="off"
             autoFocus
             placeholder="Search images and photos"
-            onChange={this.handleChange}
+            onChange={handleChange}
             value={search}
           />
         </form>
       </header>
     );
   }
-}
 
 Searchbar.propTypes = {
   onSubmit: PropTypes.func.isRequired,
